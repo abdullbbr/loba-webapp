@@ -2,7 +2,7 @@ services:
   - type: web
     name: loba-backend
     runtime: python
-    plan: free
+    plan: starter
     startCommand: "cd loba-backend && gunicorn -c gunicorn_config.py main:app"
     buildCommand: "cd loba-backend && pip install -r requirements.txt"
     envVars:
@@ -14,12 +14,12 @@ services:
   - type: web
     name: loba-frontend
     runtime: static
-    plan: free
+    plan: starter
     buildCommand: "cd loba-frontend && npm install && npm run build"
     staticPublishPath: "loba-frontend/dist"
 
 databases:
   - name: loba-db
-    plan: free
+    plan: starter
 
 
