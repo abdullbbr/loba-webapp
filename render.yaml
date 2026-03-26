@@ -2,16 +2,10 @@ services:
   - type: web
     name: loba-backend
     runtime: python
-    pythonVersion: "3.11"
-    region: oregon
     plan: free
-    buildCommand: "cd loba-backend && pip install -r requirements.txt"
     startCommand: "cd loba-backend && gunicorn -c gunicorn_config.py main:app"
+    buildCommand: "cd loba-backend && pip install -r requirements.txt"
     envVars:
-      - key: ENVIRONMENT
-        value: production
-      - key: PYTHONUNBUFFERED
-        value: "true"
       - key: DATABASE_URL
         fromDatabase:
           name: loba-db
@@ -20,15 +14,11 @@ services:
   - type: web
     name: loba-frontend
     runtime: node
-    nodeVersion: "20"
-    region: oregon
     plan: free
     buildCommand: "cd loba-frontend && npm install && npm run build"
     staticPublishPath: "loba-frontend/dist"
 
 databases:
   - name: loba-db
-    engine: postgresql
-    version: "13"
     plan: free
-    region: oregon
+
