@@ -1,0 +1,25 @@
+[Unit]
+Description=LOBA Backend API (FastAPI)
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=notify
+User=loba
+Group=loba
+WorkingDirectory=/home/loba/loba-backend
+Environment="PATH=/home/loba/loba-backend/venv/bin"
+EnvironmentFile=/home/loba/loba-backend/.env.production
+ExecStart=/home/loba/loba-backend/venv/bin/gunicorn -c /home/loba/loba-backend/gunicorn_config.py main:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+KillSignal=SIGQUIT
+Restart=always
+RestartSec=5
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
