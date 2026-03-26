@@ -1,0 +1,28 @@
+# Fly.io Frontend Configuration
+app = "loba-frontend"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "loba-frontend/Dockerfile"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 80
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+[[services.http_checks]]
+  grace_period = "30s"
+  interval = 30000
+  method = "get"
+  path = "/"
+  protocol = "http"
+  timeout = 5000
