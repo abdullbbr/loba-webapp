@@ -2,52 +2,33 @@ services:
   - type: web
     name: loba-backend
     runtime: python
-    pythonVersion: 3.11
+    pythonVersion: "3.11"
     region: oregon
     plan: free
-    
-    buildCommand: >
-      cd loba-backend &&
-      pip install --upgrade pip &&
-      pip install -r requirements.txt
-    
-    startCommand: >
-      cd loba-backend &&
-      gunicorn -c gunicorn_config.py main:app
-    
+    buildCommand: "cd loba-backend && pip install -r requirements.txt"
+    startCommand: "cd loba-backend && gunicorn -c gunicorn_config.py main:app"
     envVars:
       - key: ENVIRONMENT
         value: production
-      - key: DEBUG
-        value: false
+      - key: PYTHONUNBUFFERED
+        value: "true"
       - key: DATABASE_URL
         fromDatabase:
           name: loba-db
           property: connectionString
-      - key: SECRET_KEY
-        generateValue: true
-      - key: CORS_ORIGINS
-        value: https://loba-frontend.onrender.com
-      - key: PYTHONUNBUFFERED
-        value: true
 
   - type: web
     name: loba-frontend
     runtime: node
-    nodeVersion: 20
+    nodeVersion: "20"
     region: oregon
     plan: free
-    
-    buildCommand: cd loba-frontend && npm install && npm run build
-    staticPublishPath: loba-frontend/dist
-    
-    envVars:
-      - key: VITE_API_BASE_URL
-        value: https://loba-backend.onrender.com/api
+    buildCommand: "cd loba-frontend && npm install && npm run build"
+    staticPublishPath: "loba-frontend/dist"
 
 databases:
   - name: loba-db
     engine: postgresql
+    version: "13"
     plan: free
     region: oregon
-    version: 13
